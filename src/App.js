@@ -4,10 +4,12 @@ import Header from './components/Header/Header';
 import Input from './components/Input/Input';
 import TodoList from './components/TodoList/TodoList';
 import { v4 as uuidv4 } from 'uuid';
+import EditForm from './components/EditForm/EditForm';
 
 function App() {
   const [newTodo, setNewTodo] = useState('');
   const [todos, setTodos] = useState([]);
+  const [editing, setEditing] = useState(null);
 
   //get input value
   const updateTodoValue=(e)=>{
@@ -21,6 +23,28 @@ function App() {
     setNewTodo('')
    }
   }
+
+  //edit a todo
+  const editTodo = (id)=>{
+    const todoToEdit = todos.find(todo=>todo.id===id)
+    setEditing({...todoToEdit})
+    // console.log(editing)
+  }
+
+  const editTodoValue=(e)=>{
+    setEditing({...editing, task:e.target.value})
+    // console.log(editing)
+  }
+
+  //add a todo 
+  const updateList = ()=>{
+    const value = editing.task
+    if(value!==''){
+     const updatedTodos = todos.map(todo=>todo.id===editing.id ? {...todo, task:value}:todo)
+     setTodos(updatedTodos) 
+     setEditing(null)
+    }
+   }
 
   //delete a todo
   const deleteTask=(id)=>{
@@ -62,16 +86,20 @@ const markAllAsDone = ()=>{
   ))
 }
 
-
   return (
     <div className="App">
       <Header></Header>
-      <Input newTodo={newTodo} updateTodoValue={updateTodoValue} addNewTask={addNewTask}></Input>
+      {editing ? (<EditForm editing={editing} newTodo={newTodo} editTodoValue={editTodoValue} updateList={updateList}></EditForm>):(<>
+        <Input newTodo={newTodo} updateTodoValue={updateTodoValue} addNewTask={addNewTask}></Input>
       
-      {
-         
-         todos.length>0 && <TodoList todos={todos} deleteTask={deleteTask} markAsDone={markAsDone} markAllAsDone={markAllAsDone}	></TodoList>
+        {
+           
+           todos.length>0 && <TodoList todos={todos} deleteTask={deleteTask} markAsDone={markAsDone} markAllAsDone={markAllAsDone} 
+           editTodo={editTodo}	></TodoList>
+        }
+        </>)
       }
+      
     </div>
   );
 }

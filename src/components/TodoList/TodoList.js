@@ -7,12 +7,12 @@ import Button from '@mui/material/Button';
 
 
 
-const TodoList = ({todos, deleteTask, markAsDone, markAllAsDone}) => {
+const TodoList = ({todos, deleteTask, markAsDone, markAllAsDone, editTodo}) => {
     // console.log(todos)
     return (
         <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
             <br/>        
-              {todos.map(todo=> <Todo key={todo.id} todo={todo} deleteTask={deleteTask} markAsDone={markAsDone} ></Todo>)}
+              {todos.map(todo=> <Todo key={todo.id} todo={todo} deleteTask={deleteTask} markAsDone={markAsDone} editTodo={editTodo} ></Todo>)}
               <Button variant="contained" color="success" onClick={markAllAsDone}>
                 Mark All as Done
             </Button>
