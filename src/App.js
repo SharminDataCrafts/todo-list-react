@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import Input from './components/Input/Input';
@@ -16,11 +16,23 @@ function App() {
     setNewTodo(e.target.value)
   }
 
+  useEffect(()=>{
+    const storedTodos = JSON.parse(localStorage.getItem('todos'));
+    if(storedTodos){
+      setTodos(storedTodos)
+    }
+  },[]);
+
   //add a todo 
   const addNewTask = ()=>{
    if(newTodo.trim()!==''){
-    setTodos([...todos, {id:uuidv4(), task:newTodo, isDone:false}]) 
-    setNewTodo('')
+    localStorage.setItem('todos', JSON.stringify([...todos, {id:uuidv4(), task:newTodo, isDone:false}]));
+    const addToTodos = JSON.parse(localStorage.getItem('todos'));
+    // console.log(addToTodos)
+    // setTodos([...todos, {id:uuidv4(), task:newTodo, isDone:false}]) 
+    setTodos(addToTodos);
+    setNewTodo('');
+    // console.log(todos);
    }
   }
 
@@ -31,16 +43,18 @@ function App() {
     // console.log(editing)
   }
 
+  // get edited input value
   const editTodoValue=(e)=>{
     setEditing({...editing, task:e.target.value})
     // console.log(editing)
   }
 
-  //add a todo 
+  //Update the todolist  
   const updateList = ()=>{
     const value = editing.task
     if(value!==''){
-     const updatedTodos = todos.map(todo=>todo.id===editing.id ? {...todo, task:value}:todo)
+     const updatedTodos = todos.map(todo=>todo.id===editing.id ? {...todo, task:value}:todo);
+     localStorage.setItem('todos', JSON.stringify(updatedTodos));
      setTodos(updatedTodos) 
      setEditing(null)
     }
@@ -48,7 +62,9 @@ function App() {
 
   //delete a todo
   const deleteTask=(id)=>{
-    let newTodo = todos.filter(todo=>todo.id!==id)
+    let newTodo = todos.filter(todo=>todo.id!==id);
+    // console.log(newTodo)
+    localStorage.setItem('todos', JSON.stringify(newTodo));
     setTodos(newTodo)
   }
 
@@ -71,13 +87,16 @@ const markAsDone = (id) =>{
       return{...todo, isDone: !todo.isDone}
     }
     return todo; 
-  })
+  });
+  localStorage.setItem('todos', JSON.stringify(newTodos));
   setTodos(newTodos)
 }
 
 
 // mark all todos as done
 const markAllAsDone = ()=>{
+  const doneTodos = todos.map(todo=>({...todo, isDone:true}));
+  localStorage.setItem('todos',JSON.stringify(doneTodos))
   setTodos(todos=>
     todos.map(todo=>({
       ...todo,

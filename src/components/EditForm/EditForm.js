@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-const EditForm = ({editing, newTodo,editTodoValue, updateList}) => {
+const EditForm = ({editing, editTodoValue, updateList}) => {
     // console.log(editing)
     return (
         <div style={{display:'flex', justifyContent:'center'}}>

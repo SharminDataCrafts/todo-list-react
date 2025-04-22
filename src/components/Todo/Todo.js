@@ -12,7 +12,7 @@ const Todo = ({todo, deleteTask, markAsDone, editTodo}) => {
     // console.log(todo)
     return (
         <List
-            sx={{ width: '100%', maxWidth: 450, bgcolor: 'background.paper' }}
+            sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}
             component="nav"
             aria-labelledby="nested-list-subheader" style={{align:'center'}}
             >
